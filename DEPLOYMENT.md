@@ -61,8 +61,9 @@ Once deployed, configure your LaMetric app with:
 ## Testing Your Deployment
 
 1. **Test the endpoint**: Visit `https://your-app-name.railway.app/tix`
-2. **Check JSON response**: Should return valid LaMetric format
-3. **Test from LaMetric**: Configure your device to use the new URL
+2. **Check JSON response**: Should return valid LaMetric format with Base64 image
+3. **Test the preview**: Visit `https://your-app-name.railway.app/test` to see the generated image
+4. **Test from LaMetric**: Configure your device to use the new URL
 
 ## Troubleshooting
 
@@ -70,7 +71,8 @@ Once deployed, configure your LaMetric app with:
 - **App not starting**: Check logs for Python version compatibility
 - **404 errors**: Ensure route is `/tix` not `/`
 - **CORS errors**: Add CORS headers if accessing from web browser
-- **Icon not showing**: Verify icon IDs are correct
+- **Image not loading**: Check if LaMetric icon URLs are accessible
+- **Base64 errors**: Verify Pillow and requests are installed
 
 ### Adding CORS Support (if needed):
 ```python
