@@ -37,12 +37,26 @@ Your Flask app returns exactly what LaMetric expects:
 {
   "frames": [
     {
-      "text": "TIX",
-      "icon": "i421i422i424i420"
+      "text": "1",
+      "icon": "4423"
+    },
+    {
+      "text": "2", 
+      "icon": "9168"
+    },
+    {
+      "text": "4",
+      "icon": "70007"
+    },
+    {
+      "text": "0",
+      "icon": "1489"
     }
   ]
 }
 ```
+
+**Note**: Each digit gets its own frame with its corresponding icon. LaMetric will cycle through these 4 frames to display the time.
 
 ## Step 4: Custom Icons Section
 

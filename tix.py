@@ -32,21 +32,41 @@ def home():
     <p>This is a Flask API for displaying time on a LaMetric TIX clock.</p>
     <h2>Available endpoints:</h2>
     <ul>
-        <li><a href="/tix">/tix</a> - Get current time in TIX format for LaMetric</li>
-        <li><a href="/time">/time</a> - Get current time in readable format</li>
+        <li><a href="/tix">/tix</a> - Get current time in TIX format for LaMetric (4 frames, one per digit)</li>
+        <li><a href="/time">/time</a> - Get current time in readable format with debugging info</li>
     </ul>
     <h2>Current time:</h2>
     <p>{}</p>
+    <h2>LaMetric Response Format:</h2>
+    <pre>{{
+  "frames": [
+    {{"text": "1", "icon": "4423"}},
+    {{"text": "2", "icon": "9168"}},
+    {{"text": "4", "icon": "70007"}},
+    {{"text": "0", "icon": "1489"}}
+  ]
+}}</pre>
     '''.format(datetime.datetime.now().strftime("%H:%M:%S"))
 
 # Route to show current time in readable format
 @app.route('/time')
 def get_time():
     now = datetime.datetime.now()
+    time_string = now.strftime("%H%M")
+    digits = list(time_string)
+    
+    frames = []
+    for digit in digits:
+        frames.append({
+            'text': digit,
+            'icon': icon_map[digit]
+        })
+    
     return jsonify({
         'current_time': now.strftime("%H:%M:%S"),
-        'time_digits': list(now.strftime("%H%M")),
-        'icon_ids': [icon_map[digit] for digit in now.strftime("%H%M")]
+        'time_digits': digits,
+        'frames': frames,
+        'icon_ids': [icon_map[digit] for digit in digits]
     })
 
 # Define the API route that LaMetric will call
@@ -58,19 +78,21 @@ def get_tix_time():
     # Format the time into a four-digit string like "1240"
     time_string = now.strftime("%H%M")
 
-    # 2. Break down the time string into four icon IDs
-    # For example, "1240" becomes ['i421', 'i422', 'i424', 'i420']
-    icons = [icon_map[digit] for digit in time_string]
+    # 2. Break down the time string into individual digits
+    # For example, "1240" becomes ['1', '2', '4', '0']
+    digits = list(time_string)
 
-    # 3. Construct the JSON response
+    # 3. Create a frame for each digit with its corresponding icon
+    frames = []
+    for digit in digits:
+        frames.append({
+            'text': digit,
+            'icon': icon_map[digit]
+        })
+
+    # 4. Construct the JSON response
     lametric_response = {
-        'frames': [
-            {
-                'text': 'TIX',
-                # The 'icon' value is a single string of the four icon IDs joined together
-                'icon': "".join(icons)
-            }
-        ]
+        'frames': frames
     }
     
     # Return the data as a JSON object
