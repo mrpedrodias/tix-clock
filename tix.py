@@ -12,16 +12,16 @@ app = Flask(__name__)
 # 3. Note the icon IDs that LaMetric assigns
 # 4. Replace the placeholder IDs below with the real ones
 icon_map = {
-    '0': 'i420',  # Replace with your actual icon ID for 0
-    '1': 'i421',  # Replace with your actual icon ID for 1
-    '2': 'i422',  # Replace with your actual icon ID for 2
-    '3': 'i423',  # Replace with your actual icon ID for 3
-    '4': 'i424',  # Replace with your actual icon ID for 4
-    '5': 'i425',  # Replace with your actual icon ID for 5
-    '6': 'i426',  # Replace with your actual icon ID for 6
-    '7': 'i427',  # Replace with your actual icon ID for 7
-    '8': 'i428',  # Replace with your actual icon ID for 8
-    '9': 'i429'   # Replace with your actual icon ID for 9
+    '0': '1489',  # Replace with your actual icon ID for 0
+    '1': '4423',  # Replace with your actual icon ID for 1
+    '2': '9168',  # Replace with your actual icon ID for 2
+    '3': '9169',  # Replace with your actual icon ID for 3
+    '4': '70007',  # Replace with your actual icon ID for 4
+    '5': '70008',  # Replace with your actual icon ID for 5
+    '6': '70009',  # Replace with your actual icon ID for 6
+    '7': '70010',  # Replace with your actual icon ID for 7
+    '8': '70011',  # Replace with your actual icon ID for 8
+    '9': '70012'   # Replace with your actual icon ID for 9
 }
 
 # Root route for testing and information
