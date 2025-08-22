@@ -33,7 +33,7 @@ def create_tix_image(time_string):
     for digit in time_string:
         icon_id = icon_map[digit]
         # Construct the URL to download the icon
-        icon_url = f"https://developer.lametric.com/content/apps/icon_thumbs/{icon_id}.png"
+        icon_url = f"https://developer.lametric.com/content/apps/icon_thumbs/{icon_id}.png?v=3"
         try:
             # Download the image data
             response = requests.get(icon_url)
