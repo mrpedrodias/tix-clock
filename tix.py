@@ -6,17 +6,22 @@ app = Flask(__name__)
 
 # This is your "map" of digits to LaMetric icon IDs.
 # You MUST replace 'iXXXX' with the actual icon IDs from your LaMetric Developer account.
+# To get these IDs:
+# 1. Go to https://developer.lametric.com/
+# 2. Create your app and upload the 10 icons (0-9)
+# 3. Note the icon IDs that LaMetric assigns
+# 4. Replace the placeholder IDs below with the real ones
 icon_map = {
-    '0': 'i420',  # Your custom icon for 0
-    '1': 'i421',  # Your custom icon for 1
-    '2': 'i422',  # Your custom icon for 2
-    '3': 'i423',  # Your custom icon for 3
-    '4': 'i424',  # Your custom icon for 4
-    '5': 'i425',  # Your custom icon for 5
-    '6': 'i426',  # Your custom icon for 6
-    '7': 'i427',  # Your custom icon for 7
-    '8': 'i428',  # Your custom icon for 8
-    '9': 'i429'   # Your custom icon for 9
+    '0': 'i420',  # Replace with your actual icon ID for 0
+    '1': 'i421',  # Replace with your actual icon ID for 1
+    '2': 'i422',  # Replace with your actual icon ID for 2
+    '3': 'i423',  # Replace with your actual icon ID for 3
+    '4': 'i424',  # Replace with your actual icon ID for 4
+    '5': 'i425',  # Replace with your actual icon ID for 5
+    '6': 'i426',  # Replace with your actual icon ID for 6
+    '7': 'i427',  # Replace with your actual icon ID for 7
+    '8': 'i428',  # Replace with your actual icon ID for 8
+    '9': 'i429'   # Replace with your actual icon ID for 9
 }
 
 # Root route for testing and information
