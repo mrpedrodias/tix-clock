@@ -1,0 +1,85 @@
+from flask import Flask, jsonify
+import datetime
+
+# Create a new Flask web server
+app = Flask(__name__)
+
+# This is your "map" of digits to LaMetric icon IDs.
+# You MUST replace 'iXXXX' with the actual icon IDs from your LaMetric Developer account.
+icon_map = {
+    '0': 'i420',  # Your custom icon for 0
+    '1': 'i421',  # Your custom icon for 1
+    '2': 'i422',  # Your custom icon for 2
+    '3': 'i423',  # Your custom icon for 3
+    '4': 'i424',  # Your custom icon for 4
+    '5': 'i425',  # Your custom icon for 5
+    '6': 'i426',  # Your custom icon for 6
+    '7': 'i427',  # Your custom icon for 7
+    '8': 'i428',  # Your custom icon for 8
+    '9': 'i429'   # Your custom icon for 9
+}
+
+# Root route for testing and information
+@app.route('/')
+def home():
+    return '''
+    <h1>LaMetric TIX Clock API</h1>
+    <p>This is a Flask API for displaying time on a LaMetric TIX clock.</p>
+    <h2>Available endpoints:</h2>
+    <ul>
+        <li><a href="/tix">/tix</a> - Get current time in TIX format for LaMetric</li>
+        <li><a href="/time">/time</a> - Get current time in readable format</li>
+    </ul>
+    <h2>Current time:</h2>
+    <p>{}</p>
+    '''.format(datetime.datetime.now().strftime("%H:%M:%S"))
+
+# Route to show current time in readable format
+@app.route('/time')
+def get_time():
+    now = datetime.datetime.now()
+    return jsonify({
+        'current_time': now.strftime("%H:%M:%S"),
+        'time_digits': list(now.strftime("%H%M")),
+        'icon_ids': [icon_map[digit] for digit in now.strftime("%H%M")]
+    })
+
+# Define the API route that LaMetric will call
+@app.route('/tix')
+def get_tix_time():
+    # 1. Get the current time
+    now = datetime.datetime.now()
+    
+    # Format the time into a four-digit string like "1240"
+    time_string = now.strftime("%H%M")
+
+    # 2. Break down the time string into four icon IDs
+    # For example, "1240" becomes ['i421', 'i422', 'i424', 'i420']
+    icons = [icon_map[digit] for digit in time_string]
+
+    # 3. Construct the JSON response
+    lametric_response = {
+        'frames': [
+            {
+                'text': 'TIX',
+                # The 'icon' value is a single string of the four icon IDs joined together
+                'icon': "".join(icons)
+            }
+        ]
+    }
+    
+    # Return the data as a JSON object
+    return jsonify(lametric_response)
+
+# This allows you to run the server for testing
+if __name__ == '__main__':
+    print("Starting LaMetric TIX Clock API...")
+    print("Access the API at: http://127.0.0.1:5000/")
+    print("LaMetric endpoint: http://127.0.0.1:5000/tix")
+    
+    # Use environment variables for production deployment
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    host = os.environ.get('HOST', '127.0.0.1')
+    
+    app.run(debug=False, host=host, port=port)
