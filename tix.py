@@ -74,12 +74,15 @@ def get_tix_time():
 # This allows you to run the server for testing
 if __name__ == '__main__':
     print("Starting LaMetric TIX Clock API...")
-    print("Access the API at: http://127.0.0.1:5000/")
-    print("LaMetric endpoint: http://127.0.0.1:5000/tix")
     
     # Use environment variables for production deployment
     import os
     port = int(os.environ.get('PORT', 5000))
-    host = os.environ.get('HOST', '127.0.0.1')
+    
+    # If PORT is set (production), bind to 0.0.0.0, otherwise use 127.0.0.1 (development)
+    host = '0.0.0.0' if os.environ.get('PORT') else '127.0.0.1'
+    
+    print(f"Running on http://{host}:{port}")
+    print(f"LaMetric endpoint: http://{host}:{port}/tix")
     
     app.run(debug=False, host=host, port=port)
