@@ -11,16 +11,16 @@ app = Flask(__name__)
 # This is your "map" of digits to LaMetric icon IDs.
 # The script will use these IDs to download the correct icon images.
 icon_map = {
-    '0': '939',
-    '1': '70013',
-    '2': '70014',
-    '3': '70015',
-    '4': '70016',
-    '5': '70017',
-    '6': '70018',
-    '7': '70019',
-    '8': '70020',
-    '9': '70021'
+    '0': '70010',
+    '1': '70011',
+    '2': '70012',
+    '3': '70013',
+    '4': '70014',
+    '5': '70015',
+    '6': '70016',
+    '7': '70017',
+    '8': '70018',
+    '9': '70019'
 }
 
 # --- Helper Function to Create the Combined Image ---
