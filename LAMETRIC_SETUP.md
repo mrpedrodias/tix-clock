@@ -31,34 +31,24 @@ Fill in the basic details:
 - **Request method**: `GET`
 - **Authentication**: `None`
 
-### Expected Response Format
-Your Flask app returns exactly what LaMetric expects:
+### Expected Response Format (Base64, Single Frame)
+Your Flask app now returns a single frame with a Base64-encoded PNG image (32x8), which prevents scrolling and shows a static, stitched display of all four digits:
 ```json
 {
   "frames": [
     {
-      "text": "1",
-      "icon": "4423"
-    },
-    {
-      "text": "2", 
-      "icon": "9168"
-    },
-    {
-      "text": "4",
-      "icon": "70007"
-    },
-    {
-      "text": "0",
-      "icon": "1489"
+      "icon": "data:image/png;base64,iVBORw0KGgoAAA..."
     }
   ]
 }
 ```
 
-**Note**: Each digit gets its own frame with its corresponding icon. LaMetric will cycle through these 4 frames to display the time.
+- The server fetches the 8x8 digit icons from LaMetric, stitches them into one 32x8 image, and returns it as a Base64 data URI.
+- LaMetric renders this as a static icon, so the time does not scroll.
 
-## Step 4: Custom Icons Section
+## Step 4: Custom Icons Section (Server-side Use)
+
+Your server needs the 10 digit icons (0–9) to compose the 32x8 image. Upload them once to the Developer Portal to obtain their IDs.
 
 ### Where to Find Icon Upload
 1. **Look for "Icons" section** in your app configuration
@@ -73,21 +63,20 @@ Your Flask app returns exactly what LaMetric expects:
 
 ### Upload Process
 Upload these 10 files:
-- `icon_0.png` → Will get ID like `i420`
-- `icon_1.png` → Will get ID like `i421`
-- `icon_2.png` → Will get ID like `i422`
-- And so on...
+- `icon_0.png` → Will get an ID like `939`
+- `icon_1.png` → Will get an ID like `4423`
+- … continue for `2` through `9`
 
-### Icon Naming
-- **Name**: `TIX 0`, `TIX 1`, `TIX 2`, etc.
-- **Description**: `TIX icon with X lit squares`
+### Why upload icons if we return Base64?
+- The Flask app downloads these icons by ID from LaMetric servers and stitches them server‑side.
+- Your device receives only the final Base64 image, not the individual icon IDs.
 
 ## Step 5: Update Your Code
 
 Once you have the real icon IDs from LaMetric:
 
-1. **Note down all 10 icon IDs** (i420, i421, i422, etc.)
-2. **Update the `icon_map`** in your `tix.py` file
+1. **Note down all 10 icon IDs**
+2. **Update the `icon_map`** in your `tix.py` file (IDs are numbers as strings)
 3. **Commit and push** the changes to GitHub
 4. **Railway will redeploy** automatically
 
@@ -95,13 +84,11 @@ Once you have the real icon IDs from LaMetric:
 
 ### In Developer Portal
 1. **Click "Test"** button
-2. **Check the preview** shows correct icons
-3. **Verify API response** is working
+2. **Check the preview** shows your static image (no scrolling)
 
-### On Your Device
-1. **Go to your LaMetric device**
-2. **Add the app** from your private apps
-3. **Configure** with your Railway URL
+### From the API
+- `https://your-app-name.railway.app/tix` – returns JSON with the Base64 data URI
+- `https://your-app-name.railway.app/test` – HTML preview showing the stitched image (scaled up for visibility)
 
 ## Step 7: Publish
 
@@ -117,25 +104,30 @@ Once you have the real icon IDs from LaMetric:
 ## Troubleshooting
 
 ### Common Issues
-- **Icons not showing**: Check icon IDs are correct in `icon_map`
-- **API not responding**: Verify Railway URL is working
-- **Wrong time**: Check your server's timezone
+- **Image not loading**: Verify the icon IDs exist and are reachable at LaMetric’s CDN
+- **API not responding**: Check Railway logs and dependency installation
+- **Wrong time**: Check your server's timezone (code uses server time)
 
 ### Testing Your API
 Visit these URLs to test:
-- `https://your-app-name.railway.app/` - Home page
-- `https://your-app-name.railway.app/tix` - LaMetric endpoint
-- `https://your-app-name.railway.app/time` - Debug info
+- `https://your-app-name.railway.app/tix` - JSON response with Base64 data URI
+- `https://your-app-name.railway.app/test` - Visual preview of the stitched image
 
 ## Example Icon IDs
 
 After uploading, your icon IDs might look like:
 ```python
 icon_map = {
-    '0': 'i1234',  # Your actual icon ID for 0
-    '1': 'i1235',  # Your actual icon ID for 1
-    '2': 'i1236',  # Your actual icon ID for 2
-    # ... continue for all digits
+    '0': '939',
+    '1': '4423',
+    '2': '9168',
+    '3': '9169',
+    '4': '70007',
+    '5': '70008',
+    '6': '70009',
+    '7': '70010',
+    '8': '70011',
+    '9': '70012'
 }
 ```
 
@@ -143,7 +135,7 @@ icon_map = {
 
 1. **Create an Indicator app** (you're on the right track!)
 2. **Upload your 10 icons** (0-9)
-3. **Get the real icon IDs**
-4. **Update your code** with the real IDs
-5. **Test on your device**
+3. **Update your code** with the real IDs
+4. **Verify `/test`** renders correctly
+5. **Point the app to `/tix`**
 6. **Enjoy your TIX clock!**
